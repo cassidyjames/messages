@@ -1,0 +1,30 @@
+{
+  "app-id": "com.cassidyjames.messages",
+  "runtime": "org.gnome.Platform",
+  "runtime-version": "50",
+  "sdk": "org.gnome.Sdk",
+  "command": "com.cassidyjames.messages",
+  "finish-args": [
+    "--socket=wayland",
+    "--socket=fallback-x11",
+    "--share=ipc",
+    "--share=network",
+    "--device=dri"
+  ],
+  "modules": [
+    {
+      "name": "messages",
+      "buildsystem": "meson",
+      "run-tests": true,
+      "config-opts": [
+        "-Dprofile=release"
+      ],
+      "sources": [
+        {
+          "type": "dir",
+          "path": "."
+        }
+      ]
+    }
+  ]
+}

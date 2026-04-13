@@ -1,0 +1,44 @@
+/*
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ * SPDX-FileCopyrightText: 2026 Cassidy James Blaede <c@ssidyjam.es>
+ */
+
+using Gtk 4.0;
+using Adw 1;
+
+template $MercuryMainWindow : Adw.ApplicationWindow {
+  title: _("Mercury");
+  default-width: 960;
+  default-height: 640;
+
+  content: Adw.ToastOverlay toast_overlay {
+    child: Adw.ToolbarView {
+      [top]
+      Adw.HeaderBar {
+        name: "main-headerbar";
+      }
+
+      content: Gtk.Stack stack {
+        Adw.StatusPage loading_page {
+          name: "loading";
+          title: _("Mercury");
+          description: _("Loading Google Messages…");
+          icon-name: "com.cassidyjames.messages";
+        }
+
+        Adw.StatusPage error_page {
+          name: "error";
+          title: _("Unable to Load");
+          icon-name: "network-error-symbolic";
+
+          child: Gtk.Button error_retry_button {
+            label: _("Try Again");
+            halign: center;
+
+            styles ["pill", "suggested-action"]
+          };
+        }
+      };
+    };
+  };
+}

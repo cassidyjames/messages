@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="@app_id@" path="/@app_path@/">
+    <key name="window-maximized" type="b">
+      <default>false</default>
+      <summary>Window maximized</summary>
+    </key>
+    <key name="window-fullscreened" type="b">
+      <default>false</default>
+      <summary>Window fullscreened</summary>
+    </key>
+    <key name="window-size" type="(ii)">
+      <default>(960, 640)</default>
+      <summary>Window size</summary>
+    </key>
+  </schema>
+</schemalist>

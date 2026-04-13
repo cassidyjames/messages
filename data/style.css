@@ -1,0 +1,21 @@
+  :root {
+    --window-bg-color: #fff;
+  }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --window-bg-color: #202124;
+  }
+}
+
+#main-headerbar,
+#main-headerbar > * > * {
+  padding-top: 0;
+  padding-bottom: 0;
+  min-height: 32px;
+}
+
+#main-headerbar windowhandle > box {
+  padding-left: 2px;
+  padding-right: 2px;
+}
