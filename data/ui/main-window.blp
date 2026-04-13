@@ -14,8 +14,20 @@ template $MercuryMainWindow : Adw.ApplicationWindow {
   content: Adw.ToastOverlay toast_overlay {
     child: Adw.ToolbarView {
       [top]
-      Adw.HeaderBar {
-        name: "main-headerbar";
+      Gtk.Revealer header_revealer {
+        transition-type: slide_down;
+
+        child: Adw.HeaderBar {
+          name: "main-headerbar";
+
+          [start]
+          Gtk.ToggleButton autohide_button {
+            icon-name: "up-smaller-symbolic";
+            tooltip-text: _("Hide Titlebar");
+
+            styles ["flat"]
+          }
+        };
       }
 
       content: Gtk.Stack stack {

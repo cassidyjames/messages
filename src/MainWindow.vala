@@ -1,6 +1,6 @@
 /*
  * SPDX-License-Identifier: GPL-3.0-or-later
- * SPDX-FileCopyrightText: 2024–2026 Cassidy James Blaede <c@ssidyjam.es>
+ * SPDX-FileCopyrightText: 2026 Cassidy James Blaede <c@ssidyjam.es>
  */
 
 [GtkTemplate (ui = "/com/cassidyjames/messages/ui/main-window.ui")]
@@ -9,6 +9,8 @@ public class Mercury.MainWindow : Adw.ApplicationWindow {
         { "reload", on_reload_activate },
     };
 
+    [GtkChild] private unowned Gtk.Revealer header_revealer;
+    [GtkChild] private unowned Gtk.ToggleButton autohide_button;
     [GtkChild] private unowned Adw.ToastOverlay toast_overlay;
     [GtkChild] private unowned Gtk.Stack stack;
     [GtkChild] private unowned Adw.StatusPage loading_page;
@@ -17,6 +19,7 @@ public class Mercury.MainWindow : Adw.ApplicationWindow {
 
     private Mercury.WebView web_view;
     private string? last_failed_uri = null;
+    private bool mouse_at_top = false;
 
     public MainWindow (Adw.Application app) {
         Object (application: app);
@@ -26,6 +29,22 @@ public class Mercury.MainWindow : Adw.ApplicationWindow {
     construct {
         maximized = App.settings.get_boolean ("window-maximized");
         fullscreened = App.settings.get_boolean ("window-fullscreened");
+
+        App.settings.bind ("autohide-headerbar", autohide_button, "active", SettingsBindFlags.DEFAULT);
+        App.settings.changed["autohide-headerbar"].connect (update_header_visibility);
+
+        var motion = new Gtk.EventControllerMotion ();
+        motion.motion.connect ((x, y) => {
+            bool in_header_zone = y <= 8 ||
+                (header_revealer.child_revealed && y <= header_revealer.get_height ());
+            if (in_header_zone != mouse_at_top) {
+                mouse_at_top = in_header_zone;
+                update_header_visibility ();
+            }
+        });
+        ((Gtk.Widget) this).add_controller (motion);
+
+        update_header_visibility ();
         add_css_class (PROFILE);
 
         icon_name = APP_ID;
@@ -108,6 +127,11 @@ public class Mercury.MainWindow : Adw.ApplicationWindow {
 
     public void zoom_default () {
         web_view.zoom_level = 1.0;
+    }
+
+    private void update_header_visibility () {
+        bool autohide = App.settings.get_boolean ("autohide-headerbar");
+        header_revealer.reveal_child = !autohide || mouse_at_top;
     }
 
     public void toggle_fullscreen () {

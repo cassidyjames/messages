@@ -4,5 +4,7 @@
     <file>style.css</file>
     <file alias="Devel/style.css">style.css</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/main-window.ui</file>
+    <file alias="icons/scalable/actions/up-smaller-symbolic.svg" preprocess="xml-stripblanks">icons/up-smaller-symbolic.svg</file>
+    <file alias="Devel/icons/scalable/actions/up-smaller-symbolic.svg" preprocess="xml-stripblanks">icons/up-smaller-symbolic.svg</file>
   </gresource>
 </gresources>

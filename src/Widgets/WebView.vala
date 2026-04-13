@@ -7,10 +7,26 @@ public class Mercury.WebView : WebKit.WebView {
     private bool is_terminal = false;
 
     public WebView () {
+        var user_content = new WebKit.UserContentManager ();
+        user_content.add_style_sheet (
+            new WebKit.UserStyleSheet (
+                """
+                .call-nav-list,
+                .call-nav-list + hr {
+                    display: none !important;
+                }
+                """,
+                WebKit.UserContentInjectedFrames.ALL_FRAMES,
+                WebKit.UserStyleLevel.USER,
+                null, null
+            )
+        );
+
         Object (
             hexpand: true,
             vexpand: true,
-            network_session: new WebKit.NetworkSession (null, null)
+            network_session: new WebKit.NetworkSession (null, null),
+            user_content_manager: user_content
         );
     }
 
@@ -19,14 +35,13 @@ public class Mercury.WebView : WebKit.WebView {
 
         var webkit_settings = new WebKit.Settings () {
             default_font_family = Gtk.Settings.get_default ().gtk_font_name,
-            enable_back_forward_navigation_gestures = true,
+            enable_back_forward_navigation_gestures = false,
             enable_developer_extras = is_terminal,
             enable_html5_database = true,
             enable_html5_local_storage = true,
             enable_smooth_scrolling = true,
             enable_webgl = true,
-            // Use a Chrome-compatible user agent so Google Messages renders the full web app
-            user_agent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36",
+            // user_agent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36",
         };
 
         settings = webkit_settings;
@@ -61,6 +76,17 @@ public class Mercury.WebView : WebKit.WebView {
             }
             return false;
         });
+
+        // Intercept pinch-to-zoom in the capture phase before WebKit's native
+        // gesture handler claims it; pinch zoom on a touchpad is disorienting
+        // in a fixed-URL web app
+        var pinch_gesture = new Gtk.GestureZoom () {
+            propagation_phase = Gtk.PropagationPhase.CAPTURE
+        };
+        pinch_gesture.begin.connect ((sequence) => {
+            pinch_gesture.set_state (Gtk.EventSequenceState.CLAIMED);
+        });
+        add_controller (pinch_gesture);
 
         var back_click_gesture = new Gtk.GestureClick () {
             button = 8

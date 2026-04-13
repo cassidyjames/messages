@@ -13,5 +13,9 @@
       <default>(960, 640)</default>
       <summary>Window size</summary>
     </key>
+    <key name="autohide-headerbar" type="b">
+      <default>false</default>
+      <summary>Auto-hide headerbar</summary>
+    </key>
   </schema>
 </schemalist>
