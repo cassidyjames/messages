@@ -65,6 +65,7 @@ public class Mercury.MainWindow : Adw.ApplicationWindow {
 
         web_view = new Mercury.WebView ();
         web_view.load_uri ("https://messages.google.com/web");
+        // web_view.load_uri ("https://www.bennish.net/web-notifications.html");
         stack.add_named (web_view, "web");
 
         int window_width, window_height;
@@ -153,6 +154,10 @@ public class Mercury.MainWindow : Adw.ApplicationWindow {
         } else {
             fullscreen ();
         }
+    }
+
+    public void notification_clicked (string tag) {
+        web_view.notification_clicked (tag);
     }
 
     private void on_reload_activate () {

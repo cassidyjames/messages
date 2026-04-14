@@ -5,12 +5,15 @@
 
 public class Mercury.WebView : WebKit.WebView {
     private bool is_terminal = false;
+    private HashTable<string, WebKit.Notification> pending_notifications =
+        new HashTable<string, WebKit.Notification> (str_hash, str_equal);
 
     public WebView () {
         var user_content = new WebKit.UserContentManager ();
         user_content.add_style_sheet (
             new WebKit.UserStyleSheet (
                 """
+                mw-fi-feature-discovery-banner,
                 .call-nav-list,
                 .call-nav-list + hr {
                     display: none !important;
@@ -62,6 +65,10 @@ public class Mercury.WebView : WebKit.WebView {
             WebKit.CookiePersistentStorage.SQLITE
         );
 
+        notify["uri"].connect (() => {
+            message ("uri changed: %s", uri);
+        });
+
         context_menu.connect ((menu, hit_test_result) => {
             if (!hit_test_result.context_is_link () && !is_terminal) {
                 return true;
@@ -78,6 +85,34 @@ public class Mercury.WebView : WebKit.WebView {
                 ));
             }
             return false;
+        });
+
+        permission_request.connect ((request) => {
+            if (request is WebKit.NotificationPermissionRequest) {
+                message ("notification permission requested");
+                ((WebKit.NotificationPermissionRequest) request).allow ();
+                return true;
+            }
+            return false;
+        });
+
+        show_notification.connect ((notification) => {
+            message ("show_notification: title=%s body=%s tag=%s", notification.title, notification.body, notification.tag);
+
+            string tag = notification.tag ?? "";
+            pending_notifications[tag] = notification;
+
+            var app_notification = new GLib.Notification (notification.title);
+            app_notification.set_body (notification.body);
+            // NOTE: WebKit doesn't expose the notification icon URL in its API
+            app_notification.set_icon (new ThemedIcon (APP_ID));
+            app_notification.set_default_action_and_target_value (
+                "app.open-conversation",
+                new Variant.string (tag)
+            );
+            Mercury.App.instance.send_notification (tag, app_notification);
+            message ("send_notification called with tag=%s", tag);
+            return true;
         });
 
         decide_policy.connect ((decision, type) => {
@@ -110,5 +145,16 @@ public class Mercury.WebView : WebKit.WebView {
         };
         forward_click_gesture.pressed.connect (go_forward);
         add_controller (forward_click_gesture);
+    }
+
+    public void notification_clicked (string tag) {
+        message ("notification_clicked: tag=%s", tag);
+        var notification = pending_notifications[tag];
+        if (notification != null) {
+            notification.clicked ();
+            pending_notifications.remove (tag);
+        } else {
+            message ("notification_clicked: no pending notification for tag=%s", tag);
+        }
     }
 }
