@@ -3,6 +3,20 @@
  * SPDX-FileCopyrightText: 2026 Cassidy James Blaede <c@ssidyjam.es>
  */
 
+[DBus (name = "org.freedesktop.portal.Background")]
+interface BackgroundPortal : GLib.Object {
+    [DBus (name = "RequestBackground")]
+    public abstract GLib.ObjectPath request_background (
+        string parent_window,
+        GLib.HashTable<string, GLib.Variant> options
+    ) throws GLib.DBusError, GLib.IOError;
+
+    [DBus (name = "SetStatus")]
+    public abstract void set_status (
+        GLib.HashTable<string, GLib.Variant> options
+    ) throws GLib.DBusError, GLib.IOError;
+}
+
 [GtkTemplate (ui = "/com/cassidyjames/messages/ui/main-window.ui")]
 public class Mercury.MainWindow : Adw.ApplicationWindow {
     private const GLib.ActionEntry[] ACTION_ENTRIES = {
@@ -20,6 +34,7 @@ public class Mercury.MainWindow : Adw.ApplicationWindow {
     private string? last_failed_uri = null;
     private bool mouse_at_top = false;
     private uint hide_timeout_id = 0;
+    private bool background_requested = false;
 
     public MainWindow (Adw.Application app) {
         Object (application: app);
@@ -65,7 +80,6 @@ public class Mercury.MainWindow : Adw.ApplicationWindow {
 
         web_view = new Mercury.WebView ();
         web_view.load_uri ("https://messages.google.com/web");
-        // web_view.load_uri ("https://www.bennish.net/web-notifications.html");
         stack.add_named (web_view, "web");
 
         int window_width, window_height;
@@ -80,7 +94,15 @@ public class Mercury.MainWindow : Adw.ApplicationWindow {
 
         close_request.connect (() => {
             save_window_state ();
-            return Gdk.EVENT_PROPAGATE;
+            hide ();
+            return Gdk.EVENT_STOP;
+        });
+
+        map.connect (() => {
+            if (!background_requested) {
+                background_requested = true;
+                request_background ();
+            }
         });
         notify["fullscreened"].connect (save_window_state);
         notify["maximized"].connect (save_window_state);
@@ -158,6 +180,33 @@ public class Mercury.MainWindow : Adw.ApplicationWindow {
 
     public void notification_clicked (string tag) {
         web_view.notification_clicked (tag);
+    }
+
+    private void request_background () {
+        var options = new HashTable<string, Variant> (str_hash, str_equal);
+        options["reason"] = new Variant.string (
+            _("Receive messages and deliver notifications")
+        );
+
+        Bus.get_proxy.begin<BackgroundPortal> (
+            BusType.SESSION,
+            "org.freedesktop.portal.Desktop",
+            "/org/freedesktop/portal/desktop",
+            DBusProxyFlags.NONE,
+            null,
+            (obj, res) => {
+                try {
+                    var portal = Bus.get_proxy.end<BackgroundPortal> (res);
+                    portal.request_background ("", options);
+
+                    var status_options = new HashTable<string, Variant> (str_hash, str_equal);
+                    status_options["message"] = new Variant.string (_("Waiting for incoming messages"));
+                    portal.set_status (status_options);
+                } catch (Error e) {
+                    warning ("Could not request background: %s", e.message);
+                }
+            }
+        );
     }
 
     private void on_reload_activate () {
