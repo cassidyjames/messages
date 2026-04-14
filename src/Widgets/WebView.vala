@@ -1,6 +1,6 @@
 /*
  * SPDX-License-Identifier: GPL-3.0-or-later
- * SPDX-FileCopyrightText: 2024–2026 Cassidy James Blaede <c@ssidyjam.es>
+ * SPDX-FileCopyrightText: 2026 Cassidy James Blaede <c@ssidyjam.es>
  */
 
 public class Mercury.WebView : WebKit.WebView {
@@ -41,7 +41,6 @@ public class Mercury.WebView : WebKit.WebView {
             enable_html5_local_storage = true,
             enable_smooth_scrolling = true,
             enable_webgl = true,
-            // user_agent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36",
         };
 
         settings = webkit_settings;
@@ -63,8 +62,22 @@ public class Mercury.WebView : WebKit.WebView {
             WebKit.CookiePersistentStorage.SQLITE
         );
 
-        context_menu.connect (() => {
-            return !is_terminal;
+        context_menu.connect ((menu, hit_test_result) => {
+            if (!hit_test_result.context_is_link () && !is_terminal) {
+                return true;
+            }
+            menu.remove_all ();
+            if (hit_test_result.context_is_link ()) {
+                menu.append (new WebKit.ContextMenuItem.from_stock_action (
+                    WebKit.ContextMenuAction.COPY_LINK_TO_CLIPBOARD
+                ));
+            }
+            if (is_terminal) {
+                menu.append (new WebKit.ContextMenuItem.from_stock_action (
+                    WebKit.ContextMenuAction.INSPECT_ELEMENT
+                ));
+            }
+            return false;
         });
 
         decide_policy.connect ((decision, type) => {
@@ -77,9 +90,7 @@ public class Mercury.WebView : WebKit.WebView {
             return false;
         });
 
-        // Intercept pinch-to-zoom in the capture phase before WebKit's native
-        // gesture handler claims it; pinch zoom on a touchpad is disorienting
-        // in a fixed-URL web app
+        // Intercept pinch-to-zoom
         var pinch_gesture = new Gtk.GestureZoom () {
             propagation_phase = Gtk.PropagationPhase.CAPTURE
         };

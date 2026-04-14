@@ -11,7 +11,6 @@ public class Mercury.MainWindow : Adw.ApplicationWindow {
 
     [GtkChild] private unowned Gtk.Revealer header_revealer;
     [GtkChild] private unowned Gtk.ToggleButton autohide_button;
-    [GtkChild] private unowned Adw.ToastOverlay toast_overlay;
     [GtkChild] private unowned Gtk.Stack stack;
     [GtkChild] private unowned Adw.StatusPage loading_page;
     [GtkChild] private unowned Adw.StatusPage error_page;
@@ -20,6 +19,7 @@ public class Mercury.MainWindow : Adw.ApplicationWindow {
     private Mercury.WebView web_view;
     private string? last_failed_uri = null;
     private bool mouse_at_top = false;
+    private uint hide_timeout_id = 0;
 
     public MainWindow (Adw.Application app) {
         Object (application: app);
@@ -37,9 +37,22 @@ public class Mercury.MainWindow : Adw.ApplicationWindow {
         motion.motion.connect ((x, y) => {
             bool in_header_zone = y <= 8 ||
                 (header_revealer.child_revealed && y <= header_revealer.get_height ());
-            if (in_header_zone != mouse_at_top) {
-                mouse_at_top = in_header_zone;
-                update_header_visibility ();
+            if (in_header_zone) {
+                if (hide_timeout_id != 0) {
+                    Source.remove (hide_timeout_id);
+                    hide_timeout_id = 0;
+                }
+                if (!mouse_at_top) {
+                    mouse_at_top = true;
+                    update_header_visibility ();
+                }
+            } else if (mouse_at_top && hide_timeout_id == 0) {
+                hide_timeout_id = Timeout.add (500, () => {
+                    hide_timeout_id = 0;
+                    mouse_at_top = false;
+                    update_header_visibility ();
+                    return Source.REMOVE;
+                });
             }
         });
         ((Gtk.Widget) this).add_controller (motion);

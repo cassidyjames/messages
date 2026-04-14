@@ -1,7 +1,7 @@
-  :root {
-    --window-bg-color: #fff;
-    --headerbar-shade-color: #dadce0;
-  }
+:root {
+  --window-bg-color: #fff;
+  --headerbar-shade-color: #dadce0;
+}
 
 @media (prefers-color-scheme: dark) {
   :root {
