@@ -187,6 +187,8 @@ public class Mercury.MainWindow : Adw.ApplicationWindow {
         options["reason"] = new Variant.string (
             _("Receive messages and deliver notifications")
         );
+        options["autostart"] = new Variant.boolean (true);
+        options["commandline"] = new Variant.strv ({ APP_ID, "--background" });
 
         Bus.get_proxy.begin<BackgroundPortal> (
             BusType.SESSION,

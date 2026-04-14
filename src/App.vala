@@ -7,10 +7,15 @@ public class Mercury.App : Adw.Application {
     public static GLib.Settings settings;
 
     private MainWindow? app_window = null;
+    private bool background_start = false;
 
     public App () {
         Object (application_id: APP_ID);
         _instance = this;
+        add_main_option (
+            "background", 0, OptionFlags.NONE, OptionArg.NONE,
+            "Start in the background without opening a window", null
+        );
     }
 
     public static App _instance = null;
@@ -25,6 +30,13 @@ public class Mercury.App : Adw.Application {
 
     static construct {
         settings = new Settings (APP_ID);
+    }
+
+    protected override int handle_local_options (VariantDict options) {
+        if (options.contains ("background")) {
+            background_start = true;
+        }
+        return -1;
     }
 
     protected override void activate () {
@@ -67,7 +79,10 @@ public class Mercury.App : Adw.Application {
             });
         }
 
-        app_window.present ();
+        if (!background_start) {
+            app_window.present ();
+        }
+        background_start = false;
     }
 
     public static int main (string[] args) {
