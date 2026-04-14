@@ -4,14 +4,11 @@ Google Messages, on your desktop. Mercury delivers your messages to you on your 
 
 ## Features
 
-- **Native notifications** — incoming messages trigger GNOME desktop notifications, even when the window is in the background
-- **Background running** — stay connected without keeping the window open; Mercury runs quietly until you need it
-- **Background Apps portal** — uses the XDG Background Apps portal to surface status in GNOME and other supported desktops
-- **System theme integration** — follows GNOME's light/dark preference and accent colors
-- **Persistent session** — stays logged in across launches via stored cookies/session data
-- **Minimal chrome** — clean GNOME HIG-compliant window with a headerbar; the web app takes center stage
-- **Keyboard shortcuts** — standard GNOME shortcuts work as expected (e.g. Ctrl+W to close, Ctrl+R to reload)
-- **Sandboxed via Flatpak** — only requires network access; no unnecessary permissions
+- Native notifications
+- Runs in the background
+- Light/dark style support
+- Minimal UI with optionally auto-hiding titlebar
+- Keyboard shortcuts for zoom, closing, and fullscreen
 
 ## Building
 

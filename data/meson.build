@@ -31,6 +31,14 @@ desktop_file = configure_file(
   install_dir: get_option('datadir') / 'applications',
 )
 
+metainfo_file = configure_file(
+  input: files('metainfo.xml.in'),
+  output: app_id + '.metainfo.xml',
+  configuration: data_config,
+  install: true,
+  install_dir: get_option('datadir') / 'metainfo',
+)
+
 blueprint_compiler = find_program('blueprint-compiler')
 
 blueprints = custom_target(

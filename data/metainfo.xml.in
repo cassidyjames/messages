@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2026 Cassidy James Blaede <c@ssidyjam.es> -->
+<component type="desktop">
+  <id>@app_id@</id>
+  <metadata_license>CC-BY-SA-4.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+
+  <name>@app_name@</name>
+  <summary>Google Messages on your desktop</summary>
+
+  <branding>
+    <color type="primary" scheme_preference="light">#c2e7ff</color>
+    <color type="primary" scheme_preference="dark">#004a77</color>
+  </branding>
+
+  <developer_name translatable="no">Cassidy James Blaede</developer_name>
+  <developer id="com.cassidyjames">
+    <name translatable="no">Cassidy James Blaede</name>
+  </developer>
+
+  <description>
+    <p>Rather than keeping a browser tab open all the time, let Mercury keep you connected with your messages. Native features include:</p>
+    <ul>
+      <li>Quick access from your App Grid, Applications Menu, Dash, Dock, etc.</li>
+      <li>Desktop notifications for incoming messages</li>
+      <li>Minimal UI with optionally auto-hiding titlebar</li>
+    </ul>
+    <p>Other features include:</p>
+    <ul>
+      <li>External links open in your default browser</li>
+      <li>Zoom with Ctrl+Plus/Minus or Ctrl+0 to reset</li>
+      <li>Fullscreen with F11</li>
+    </ul>
+  </description>
+
+  <provides>
+    <binary>@app_id@</binary>
+  </provides>
+  <launchable type="desktop-id">@app_id@.desktop</launchable>
+
+  <recommends>
+    <display_length compare="ge">360</display_length>
+  </recommends>
+  <supports>
+    <control>pointing</control>
+    <control>keyboard</control>
+    <control>touch</control>
+  </supports>
+
+  <releases>
+    <release version="0.1.0" date="2026-04-13">
+      <description>
+        <p>Initial release</p>
+      </description>
+    </release>
+  </releases>
+
+  <content_rating type="oars-1.1">
+    <content_attribute id="social-chat">intense</content_attribute>
+    <content_attribute id="social-info">mild</content_attribute>
+  </content_rating>
+
+  <url type="homepage">https://github.com/cassidyjames/messages</url>
+  <url type="bugtracker">https://github.com/cassidyjames/messages/issues</url>
+  <url type="vcs-browser">https://github.com/cassidyjames/messages</url>
+  <url type="donation">https://cassidyjames.com/pay</url>
+  <url type="help">https://cassidyjames.com/support</url>
+</component>
