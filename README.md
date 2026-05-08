@@ -12,6 +12,8 @@ Google Messages, on your desktop. Mercury delivers your messages to you on your 
 
 ## Known limitations
 
+- When logging in, it apparently hangs when trying to use a passkey; just hit “Try another way” and pick another method.
+
 - Notifications require toggling the webapp's notification setting off and back on EVERY SESSION. This is super annoying!
 
 - Notifications use the app icon instead of the sender/conversation avatar. Unfortunately WebKit does not expose the icon URL from web notifications.
