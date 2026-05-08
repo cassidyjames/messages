@@ -12,8 +12,8 @@
   <category rdf:resource="http://api.gnome.org/doap-extensions#apps" />
 
   <homepage rdf:resource="https://cassidyjames.com/apps" />
-  <download-page rdf:resource="https://flathub.org/apps/com.cassidyjames.messages" />
-  <bug-database rdf:resource="https://github.com/cassidyjames/messages/issues" />
+  <download-page rdf:resource="https://flathub.org/apps/com.cassidyjames.mercury" />
+  <bug-database rdf:resource="https://github.com/cassidyjames/mercury/issues" />
 
   <programming-language>Vala</programming-language>
 

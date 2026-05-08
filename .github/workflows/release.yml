@@ -23,8 +23,8 @@ jobs:
     - uses: actions/checkout@v4
     - uses: flatpak/flatpak-github-actions/flatpak-builder@v6.6
       with:
-        bundle: com.cassidyjames.messages.flatpak
-        manifest-path: com.cassidyjames.messages.json
+        bundle: com.cassidyjames.mercury.flatpak
+        manifest-path: com.cassidyjames.mercury.json
         cache-key: "flatpak-builder-${{ github.sha }}-${{ matrix.arch }}"
         arch: ${{ matrix.arch }}
 
@@ -38,23 +38,23 @@ jobs:
     - name: Download Flatpak bundle (aarch64)
       uses: actions/download-artifact@v7
       with:
-        name: com.cassidyjames.messages-aarch64.flatpak
+        name: com.cassidyjames.mercury-aarch64.flatpak
 
     - name: Upload Flatpak to release (aarch64)
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        mv com.cassidyjames.messages.flatpak 'com.cassidyjames.messages-${{ github.event.release.tag_name }}-aarch64.flatpak'
-        gh release upload ${{ github.event.release.tag_name }} com.cassidyjames.messages-${{ github.event.release.tag_name }}-aarch64.flatpak --repo ${{ github.repository }}
+        mv com.cassidyjames.mercury.flatpak 'com.cassidyjames.mercury-${{ github.event.release.tag_name }}-aarch64.flatpak'
+        gh release upload ${{ github.event.release.tag_name }} com.cassidyjames.mercury-${{ github.event.release.tag_name }}-aarch64.flatpak --repo ${{ github.repository }}
 
     - name: Download Flatpak bundle (x86_64)
       uses: actions/download-artifact@v7
       with:
-        name: com.cassidyjames.messages-x86_64.flatpak
+        name: com.cassidyjames.mercury-x86_64.flatpak
 
     - name: Upload Flatpak to release (x86_64)
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        mv com.cassidyjames.messages.flatpak 'com.cassidyjames.messages-${{ github.event.release.tag_name }}-x86_64.flatpak'
-        gh release upload ${{ github.event.release.tag_name }} com.cassidyjames.messages-${{ github.event.release.tag_name }}-x86_64.flatpak --repo ${{ github.repository }}
+        mv com.cassidyjames.mercury.flatpak 'com.cassidyjames.mercury-${{ github.event.release.tag_name }}-x86_64.flatpak'
+        gh release upload ${{ github.event.release.tag_name }} com.cassidyjames.mercury-${{ github.event.release.tag_name }}-x86_64.flatpak --repo ${{ github.repository }}

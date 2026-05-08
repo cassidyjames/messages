@@ -28,7 +28,7 @@ jobs:
     - uses: actions/checkout@v4
     - uses: flatpak/flatpak-github-actions/flatpak-builder@v6.6
       with:
-        bundle: com.cassidyjames.messages.Devel.flatpak
-        manifest-path: com.cassidyjames.messages.Devel.json
+        bundle: com.cassidyjames.mercury.Devel.flatpak
+        manifest-path: com.cassidyjames.mercury.Devel.json
         cache-key: "flatpak-builder-${{ github.sha }}-${{ matrix.arch }}"
         arch: ${{ matrix.arch }}

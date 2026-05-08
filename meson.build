@@ -1,5 +1,5 @@
 project(
-  'com.cassidyjames.messages',
+  'com.cassidyjames.mercury',
   'vala', 'c',
   version: '0.1.0',
   meson_version: '>=1.5.1',

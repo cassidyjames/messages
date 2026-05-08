@@ -17,7 +17,7 @@ interface BackgroundPortal : GLib.Object {
     ) throws GLib.DBusError, GLib.IOError;
 }
 
-[GtkTemplate (ui = "/com/cassidyjames/messages/ui/main-window.ui")]
+[GtkTemplate (ui = "/com/cassidyjames/mercury/ui/main-window.ui")]
 public class Mercury.MainWindow : Adw.ApplicationWindow {
     private const GLib.ActionEntry[] ACTION_ENTRIES = {
         { "reload", on_reload_activate },

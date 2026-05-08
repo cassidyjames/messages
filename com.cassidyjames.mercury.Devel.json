@@ -1,9 +1,9 @@
 {
-  "app-id": "com.cassidyjames.messages",
+  "app-id": "com.cassidyjames.mercury.Devel",
   "runtime": "org.gnome.Platform",
   "runtime-version": "50",
   "sdk": "org.gnome.Sdk",
-  "command": "com.cassidyjames.messages",
+  "command": "com.cassidyjames.mercury.Devel",
   "finish-args": [
     "--socket=wayland",
     "--socket=fallback-x11",
@@ -13,11 +13,11 @@
   ],
   "modules": [
     {
-      "name": "messages",
+      "name": "com.cassidyjames.mercury",
       "buildsystem": "meson",
       "run-tests": true,
       "config-opts": [
-        "-Dprofile=release"
+        "-Dprofile=devel"
       ],
       "sources": [
         {
