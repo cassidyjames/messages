@@ -9,8 +9,8 @@
   <summary>Google Messages on your desktop</summary>
 
   <branding>
-    <color type="primary" scheme_preference="light">#c2e7ff</color>
-    <color type="primary" scheme_preference="dark">#004a77</color>
+    <color type="primary" scheme_preference="light">#d3e3fd</color>
+    <color type="primary" scheme_preference="dark">#1A73E8</color>
   </branding>
 
   <developer_name translatable="no">Cassidy James Blaede</developer_name>
@@ -33,6 +33,25 @@
     </ul>
   </description>
 
+  <screenshots>
+    <screenshot type="default">
+      <image>https://raw.githubusercontent.com/cassidyjames/mercury/0.1.0/data/screenshots/screenshot.png</image>
+      <caption>Conversation list alongside an open conversation in light style</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/cassidyjames/mercury/0.1.0/data/screenshots/screenshot-dark.png</image>
+      <caption>Conversation list alongside an open conversation in dark style</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/cassidyjames/mercury/0.1.0/data/screenshots/screenshot-mobile.png</image>
+      <caption>An open conversation in light style at a narrow width</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/cassidyjames/mercury/0.1.0/data/screenshots/screenshot-mobile-dark.png</image>
+      <caption>An open conversation in dark style at a narrow width</caption>
+    </screenshot>
+  </screenshots>
+
   <provides>
     <binary>@app_id@</binary>
   </provides>
@@ -50,7 +69,7 @@
   <releases>
     <release version="0.1.0" date="2026-04-13">
       <description>
-        <p>Initial release</p>
+        <p>Initial release. Mercury delivers Google Messages to your Linux desktop with native integration including desktop notifications, background operation, and light/dark style support.</p>
       </description>
     </release>
   </releases>
